@@ -14,22 +14,26 @@ export class Search extends Component {
     }
 
     performSearch(searchTerm) {
-        console.log("Perform search using spoonacular")
+
+        if (typeof(searchTerm) == "string") {
+          console.log("Perform search using Google Book API")
         // searchTerm.replace(/\s/g, '+')
         const urlString = "https://www.googleapis.com/books/v1/volumes?q=" + searchTerm + "&key=" + process.env.REACT_APP_API_KEY;
         $.ajax({
           url: urlString,
           success: (searchResults) => {
             console.log("Fetched data Google Book API")
-            console.log(searchResults.items)
+            console.log(searchResults.items[0].volumeInfo)
             const results = searchResults
-            // const pairings = searchResults.pairings
-            // const text = searchResults.text
-            // console.log(results)
+            const bookTitle = searchResults.items[0].volumeInfo.title;
+            const bookImage = searchResults.items[0].volumeInfo.imageLinks.smallThumbnail;
+
+            // const bookAuthor = searchResults.items[0].volumeInfo.authors[0];
+            // console.log(bookAuthor);
     
             var bookRows = []
 
-            const bookRow = <BookRow key={results} />
+            const bookRow = <BookRow key={bookTitle} title={bookTitle} image={bookImage} />
             bookRows.push(bookRow)
     
             this.setState({rows: bookRows})
@@ -38,6 +42,32 @@ export class Search extends Component {
             console.log("Failed to fetch data")
           }
         })
+        }
+        
+        // console.log("Perform search using spoonacular")
+        // // searchTerm.replace(/\s/g, '+')
+        // const urlString = "https://www.googleapis.com/books/v1/volumes?q=" + searchTerm + "&key=" + process.env.REACT_APP_API_KEY;
+        // $.ajax({
+        //   url: urlString,
+        //   success: (searchResults) => {
+        //     console.log("Fetched data Google Book API")
+        //     console.log(searchResults.items)
+        //     const results = searchResults
+        //     // const pairings = searchResults.pairings
+        //     // const text = searchResults.text
+        //     // console.log(results)
+    
+        //     var bookRows = []
+
+        //     const bookRow = <BookRow key={results} />
+        //     bookRows.push(bookRow)
+    
+        //     this.setState({rows: bookRows})
+        //   },
+        //   error: (xhr, status, err) => {
+        //     console.log("Failed to fetch data")
+        //   }
+        // })
       }
     
       searchChangeHandler(event) {
