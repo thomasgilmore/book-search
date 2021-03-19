@@ -4,7 +4,8 @@ class BookRow extends React.Component {
     render() {
         return (
             <div>
-                <p></p>
+                <img src={this.props.image} alt={this.props.title} />
+                <p>{this.props.title}</p>
             </div>
         )
     }
